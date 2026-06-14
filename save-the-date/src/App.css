@@ -1,0 +1,31 @@
+@import "tailwindcss";
+
+@layer base {
+  /* Pour forcer les polices élégantes */
+  .font-serif {
+    font-family: 'Playfair Display', serif;
+  }
+  
+  /* Animations douces */
+  .animate-fade-in-up {
+    animation: fadeInUp 0.8s ease-out forwards;
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  
+  .animate-fade-in {
+    animation: fadeIn 0.8s ease-out forwards;
+    opacity: 0;
+  }
+
+  @keyframes fadeInUp {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fadeIn {
+    to { opacity: 1; }
+  }
+}
