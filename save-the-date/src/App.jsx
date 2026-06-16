@@ -47,7 +47,8 @@ const handleResponse = (reponse) => {
     setRsvpStatus('loading');
     
     // Ton URL confirmée
-    const baseUrl = "https://script.google.com/macros/s/AKfycbyqk_-PbQOYtSo6LwLiao4fZ1fYNgnZ7z0KaWNdkiH8w-IUqNpYhYWOsGKGLNvI2ascLw/exec"; 
+    const baseUrl = "https://script.google.com/macros/s/AKfycbzyg_sULXS3qr86EVe-BMowReOvn_prHTXFfUWkC-kXCGIhv32CanZz5ybOLxxbAIXbbA/exec"//"https://script.google.com/macros/s/AKfycbyqk_-PbQOYtSo6LwLiao4fZ1fYNgnZ7z0KaWNdkiH8w-IUqNpYhYWOsGKGLNvI2ascLw/exec"; 
+    
     const urlWithParams = `${baseUrl}?id=${guestId}&status=${reponse}`;
 
     try {
