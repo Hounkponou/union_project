@@ -82,6 +82,9 @@
   .verse blockquote{margin:0;font-family:var(--disp);font-style:italic;font-weight:400;font-size:clamp(24px,3.4vw,40px);line-height:1.36;color:var(--ink);text-wrap:balance}
   .verse figcaption{margin-top:20px;font-family:var(--sans);font-weight:600;font-size:clamp(11px,1.3vw,13px);letter-spacing:.22em;text-transform:uppercase;color:var(--sage-deep);display:flex;align-items:center;gap:12px}
   .verse figcaption::before{content:"";width:28px;height:2px;background:var(--blue-deep)}
+  .intro-line{font-family:var(--sans);font-weight:400;font-size:clamp(15px,1.7vw,19px);line-height:1.66;color:var(--ink-soft);margin:clamp(24px,3vw,34px) 0 0;max-width:38ch}
+  .intro-line .hl-line{color:var(--sage-deep);font-weight:600}
+  .intro-sig{font-family:var(--disp);font-style:italic;font-weight:400;font-size:clamp(20px,2.4vw,28px);color:var(--sage-deep);margin:14px 0 0}
   .datecol{display:flex;flex-direction:column;align-items:flex-start}
   .date{display:flex;align-items:flex-end;gap:clamp(18px,3vw,34px)}
   .date .big{font-family:var(--disp);font-weight:600;font-size:clamp(104px,17vw,220px);line-height:.74;color:var(--sage-deep);font-variant-numeric:tabular-nums;letter-spacing:-.02em}
@@ -161,10 +164,14 @@
 
   <section class="body">
     <div class="wrap grid">
-      <figure class="verse reveal">
-        <blockquote>«&nbsp;Je suis à mon bien-aimé, et mon bien-aimé est à moi.&nbsp;»</blockquote>
-        <figcaption>Cantique des Cantiques 6.3</figcaption>
-      </figure>
+      <div class="intro reveal">
+        <figure class="verse">
+          <blockquote>«&nbsp;Par-dessus tout, revêtez-vous de l'amour, qui est le lien de la perfection.&nbsp;»</blockquote>
+          <figcaption>Colossiens 3.14</figcaption>
+        </figure>
+        <p class="intro-line">C'est sous le manteau de la grâce et de l'amour que nous unissons nos vies pour toujours. <span class="hl-line">Réservez notre date.</span></p>
+        <p class="intro-sig">Ella &amp; Emmanuel</p>
+      </div>
       <div class="datecol reveal">
         <div class="date">
           <span class="big">26</span>
