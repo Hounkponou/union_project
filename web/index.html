@@ -1,5 +1,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="icon-192.png" sizes="192x192" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#4C5E36">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Ella & Emmanuel">
 <title>Ella & Emmanuel</title>
 <meta name="description" content="Save the Date — Ella & Emmanuel, 26 décembre 2026, Cotonou.">
 <meta property="og:type" content="website">
@@ -55,7 +63,8 @@
   /* Telephone : empile photo (haut) puis texte (bas) */
   .hero{position:relative;width:100%;background:var(--ivory);overflow:hidden;display:flex;flex-direction:column}
   .hero-media{position:relative;width:100%;aspect-ratio:4/5;overflow:hidden;order:1}
-  .hero-media img{width:100%;height:100%;object-fit:cover;object-position:50% 20%;filter:grayscale(1) contrast(1.07) brightness(1.02)}
+  .hero-media img{width:100%;height:100%;object-fit:cover;object-position:50% 20%;filter:grayscale(1) contrast(1.07) brightness(1.02);will-change:transform;animation:kenburns 24s ease-in-out infinite alternate}
+  @keyframes kenburns{from{transform:scale(1)}to{transform:scale(1.06)}}
   .hero-media .scrim{display:none}
   .hero-content{order:2;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:clamp(34px,8vw,52px) clamp(24px,6vw,44px);color:var(--ink)}
   .hero-kicker{font-family:var(--sans);font-weight:600;font-size:12px;letter-spacing:.34em;text-transform:uppercase;color:var(--ink-soft);margin:0 0 16px}
@@ -140,7 +149,7 @@
   @keyframes rise{to{opacity:1;transform:none}}
   @keyframes bob{0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,7px)}}
   .hero .scroll{animation:bob 2.4s ease-in-out infinite}
-  @media (prefers-reduced-motion:reduce){.reveal,.hero .caption{opacity:1;transform:none;transition:none;animation:none}.btn,.hero .scroll{transition:none;animation:none}}
+  @media (prefers-reduced-motion:reduce){.reveal,.hero .caption{opacity:1;transform:none;transition:none;animation:none}.btn,.hero .scroll,.hero-media img{transition:none;animation:none;transform:none}}
 </style>
 
 <div class="page">
