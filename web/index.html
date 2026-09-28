@@ -129,7 +129,10 @@
   .foot-inner{display:flex;flex-direction:column;align-items:center;gap:10px}
   footer .sig{font-family:var(--disp);font-style:italic;font-weight:400;font-size:clamp(22px,2.6vw,32px);letter-spacing:.06em;color:var(--cream)}
   footer .meta{font-family:var(--sans);font-weight:400;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:rgba(245,239,225,.7)}
-  .foot-note{font-family:var(--sans);font-weight:400;font-size:11px;letter-spacing:.06em;color:rgba(245,239,225,.55);margin-top:6px}
+  .foot-contact{display:inline-flex;align-items:center;gap:8px;margin-top:6px;font-family:var(--sans);font-weight:500;font-size:12px;letter-spacing:.06em;color:var(--cream);text-decoration:none;border-bottom:1px solid rgba(245,239,225,.4);padding-bottom:3px;transition:color .25s ease,border-color .25s ease}
+  .foot-contact:hover{color:#C9D8A8;border-color:#C9D8A8}
+  .foot-contact:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+  .foot-note{font-family:var(--sans);font-weight:400;font-size:11px;letter-spacing:.06em;color:rgba(245,239,225,.55);margin-top:10px}
 
   .reveal{opacity:0;transform:translateY(16px);transition:opacity .9s ease,transform .9s ease}
   .reveal.in{opacity:1;transform:none}
@@ -210,6 +213,10 @@
       <div class="wrap foot-inner">
         <span class="sig">E &amp; E</span>
         <span class="meta">L'invitation officielle suivra</span>
+        <a class="foot-contact" href="https://wa.me/2290161880183?text=Bonjour%20%3A)%20j%27ai%20une%20question%20concernant%20votre%20Save%20the%20Date%20%F0%9F%8C%BF" target="_blank" rel="noopener noreferrer">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.5 15.2L2 22l4.9-1.5A10 10 0 1 0 12 2Zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .1-1.7-.1-.4-.1-.9-.3-1.6-.6-2.8-1.2-4.6-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.8 0-1.3.7-2 .9-2.2.2-.2.5-.3.7-.3h.5c.2 0 .4 0 .6.5.2.6.8 2 .9 2.1.1.1.1.3 0 .5l-.3.5c-.1.2-.3.3-.1.6.1.3.7 1.1 1.4 1.7.9.8 1.7 1.1 2 1.2.2.1.4.1.5-.1.1-.2.6-.7.8-.9.2-.3.3-.2.6-.1.2.1 1.5.7 1.8.9.3.1.4.2.5.3.1.2.1.6-.1 1.1Z"/></svg>
+          Une question&nbsp;? Écrivez-nous
+        </a>
         <span class="foot-note">Merci de ne pas partager ce lien.</span>
       </div>
     </footer>
