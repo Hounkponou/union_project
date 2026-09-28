@@ -80,6 +80,13 @@
     .hero-content{order:1;height:100%;padding:clamp(30px,4.5vw,60px) clamp(26px,3.6vw,48px)}
     .hero .names{font-size:clamp(38px,4.4vw,48px);line-height:1.05}
   }
+  /* Telephone : composition plus ramassee (photo + texte equilibres, moins de vide) */
+  @media(max-width:619px){
+    .hero-media{aspect-ratio:1/1}
+    .hero-media img{object-position:50% 24%}
+    .hero-content{padding-top:clamp(26px,6vw,38px);padding-bottom:clamp(18px,4vw,26px)}
+    .body{padding-top:clamp(26px,6vw,40px);padding-bottom:clamp(36px,8vw,64px)}
+  }
 
   /* ---------- BODY : invitation + date (2 colonnes sur desktop) ---------- */
   .body{padding-top:clamp(48px,8vw,96px);padding-bottom:clamp(48px,8vw,96px)}
