@@ -17,7 +17,8 @@
  */
 
 // ===== CONFIG =====
-var SITE_URL = "https://save-the-date-one-orcin.vercel.app"; // base du site
+// URL du déploiement du DOSSIER invitation/ (projet Vercel séparé). À compléter après déploiement.
+var INVITATION_URL = "https://VOTRE-PROJET-INVITATION.vercel.app";
 var SHEET_NAME = ""; // "" = 1re feuille. Sinon : nom exact de l'onglet des réponses.
 var COL = {          // libellés cherchés (exact d'abord, sinon « contient »), insensible à la casse
   nom: "nom",
@@ -136,7 +137,7 @@ function genererLiens() {
   var n = 0;
   for (var r = 1; r < data.length; r++) {
     var id = String(data[r][iId]).trim();
-    if (id) { sh.getRange(r + 1, iLien + 1).setValue(SITE_URL + "/invitation.html?id=" + id); n++; }
+    if (id) { sh.getRange(r + 1, iLien + 1).setValue(INVITATION_URL + "/?id=" + id); n++; }
   }
   SpreadsheetApp.getUi().alert(n + " lien(s) généré(s).");
 }
