@@ -18,7 +18,7 @@
 
 // ===== CONFIG =====
 // URL du déploiement du DOSSIER invitation/ (projet Vercel séparé). À compléter après déploiement.
-var INVITATION_URL = "https://VOTRE-PROJET-INVITATION.vercel.app";
+var INVITATION_URL = "https://wedding-emmanuel-ella.vercel.app";
 var SHEET_NAME = ""; // "" = 1re feuille. Sinon : nom exact de l'onglet des réponses.
 var COL = {          // libellés cherchés (exact d'abord, sinon « contient »), insensible à la casse
   nom: "nom",
