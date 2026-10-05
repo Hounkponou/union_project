@@ -1,0 +1,99 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pointage — Ella & Emmanuel</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;1,400&family=Archivo:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{color-scheme:light;
+    --ivory:#F5EFE1;--ink:#24221C;--ink-soft:#6B6656;--sage:#8CA06A;--sage-deep:#53663A;--sage-panel:#4C5E36;
+    --cream:#F5EFE1;--ok:#4C5E36;--warn:#9A7B2E;--err:#9A3B2E;
+    --disp:"Playfair Display",serif;--sans:"Archivo",Arial,sans-serif;}
+  *{box-sizing:border-box}
+  body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;
+    background:var(--sage-panel);color:var(--cream);font-family:var(--sans);-webkit-font-smoothing:antialiased;
+    background-image:radial-gradient(80% 60% at 50% 0,rgba(140,160,106,.35),transparent 60%);}
+  .box{width:100%;max-width:420px;text-align:center;background:rgba(0,0,0,.14);border:1px solid rgba(245,239,225,.18);
+    border-radius:24px;padding:40px 28px 34px;backdrop-filter:blur(4px)}
+  .eyebrow{font-weight:600;font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:#C9D8A8;margin:0 0 20px}
+  .ic{width:84px;height:84px;border-radius:50%;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;
+    background:rgba(245,239,225,.12);border:2px solid var(--cream)}
+  .ic svg{width:44px;height:44px;stroke:var(--cream);fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+  h1{font-family:var(--disp);font-weight:600;font-size:clamp(26px,7vw,34px);line-height:1.1;margin:0 0 6px;color:var(--cream)}
+  .status{font-weight:600;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:#C9D8A8;margin:0 0 18px}
+  .badges{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:16px 0 0}
+  .badge{font-weight:500;font-size:13px;letter-spacing:.04em;color:var(--cream);background:rgba(245,239,225,.12);
+    border:1px solid rgba(245,239,225,.28);border-radius:999px;padding:9px 18px}
+  .badge .lbl{display:block;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:#C9D8A8;margin-bottom:2px}
+  .msg{font-size:14px;color:rgba(245,239,225,.82);margin:16px auto 0;max-width:30ch;line-height:1.5}
+  .again{display:inline-block;margin-top:26px;font-weight:600;font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--sage-panel);background:var(--cream);text-decoration:none;padding:14px 28px;border-radius:999px}
+  .spin{width:40px;height:40px;border:3px solid rgba(245,239,225,.3);border-top-color:var(--cream);border-radius:50%;
+    margin:10px auto;animation:sp 1s linear infinite}
+  @keyframes sp{to{transform:rotate(360deg)}}
+  .state--ok .ic{border-color:#C9D8A8}
+  .state--warn .ic{border-color:#E6CE8A} .state--warn .status{color:#E6CE8A}
+  .state--err .ic{border-color:#E6A892} .state--err .status{color:#E6A892}
+</style>
+
+<div class="box" id="box">
+  <p class="eyebrow">Ella &amp; Emmanuel · Accueil</p>
+  <div class="spin" id="spin"></div>
+  <p class="msg" id="loading">Vérification en cours…</p>
+  <div id="result" hidden></div>
+</div>
+
+<script>
+var APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwjQebDm7qsCdHh31LlfTqVwUo6jlZNwxI_2TotySQITzvsnISIUY-2cXNhARhk6mg/exec";
+var id = new URLSearchParams(location.search).get("id") || "";
+
+var CHECK = '<svg viewBox="0 0 24 24"><path d="M4 12.5l5 5L20 6.5"/></svg>';
+var INFO  = '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 7.5v.5"/></svg>';
+var CROSS = '<svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>';
+
+function done(cls, icon, title, status, badgesHtml, msg){
+  document.getElementById("spin").hidden = true;
+  document.getElementById("loading").hidden = true;
+  document.getElementById("box").className = "box state--" + cls;
+  document.getElementById("result").innerHTML =
+    '<div class="ic">'+icon+'</div>' +
+    '<h1>'+title+'</h1>' +
+    (status?'<p class="status">'+status+'</p>':'') +
+    (badgesHtml||'') +
+    (msg?'<p class="msg">'+msg+'</p>':'') +
+    '<a class="again" href="checkin.html">Scanner le suivant</a>';
+  document.getElementById("result").hidden = false;
+}
+
+function badges(g){
+  var h = "";
+  if(g.places)   h += '<span class="badge"><span class="lbl">Places</span>'+g.places+'</span>';
+  if(g.table)    h += '<span class="badge"><span class="lbl">Table</span>'+g.table+'</span>';
+  if(g.categorie)h += '<span class="badge"><span class="lbl">Catégorie</span>'+g.categorie+'</span>';
+  return h ? '<div class="badges">'+h+'</div>' : "";
+}
+
+function handle(g){
+  if(!g || g.ok === false || !g.nom){
+    return done("err", CROSS, "Invitation inconnue", "Non reconnu", "", "Ce QR ne correspond à aucun invité.");
+  }
+  if(g.already){
+    done("warn", INFO, g.nom, "Déjà pointé(e)", badges(g), "Cet invité a déjà été enregistré à l'entrée.");
+  } else {
+    done("ok", CHECK, g.nom, "Bienvenue · Présence confirmée", badges(g), "");
+  }
+}
+
+if(!id){
+  done("err", CROSS, "Aucun code", "", "", "Scannez le QR d'une invitation pour pointer l'invité.");
+} else {
+  var fn = "__cb" + Date.now();
+  window[fn] = function(d){ handle(d); try{delete window[fn];}catch(e){} };
+  var s = document.createElement("script");
+  s.src = APPS_SCRIPT_URL + "?action=checkin&id=" + encodeURIComponent(id) + "&callback=" + fn;
+  s.onerror = function(){ done("err", CROSS, "Connexion impossible", "", "", "Vérifiez la connexion internet et réessayez."); };
+  document.body.appendChild(s);
+}
+</script>
