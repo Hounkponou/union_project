@@ -197,19 +197,43 @@ function render(guest){
 
   hide(document.getElementById("loading"));
   show(document.getElementById("content"));
+  if(params.get("dl") === "1"){ setTimeout(telechargerCarte, 600); } // auto-téléchargement (lien ?id=...&dl=1)
 }
 
-// Téléchargement de la carte en image
-document.getElementById("dl").addEventListener("click", function(){
+// Téléchargement de la carte en image (fiabilisé : attente des images, largeur figée, fond ivoire)
+function nomFichier(){
+  var n = (document.getElementById("g-nom").textContent || "invitation").trim();
+  n = n.replace(/\s+/g,"-").replace(/[^A-Za-z0-9\-]/g,"");
+  return "Invitation-" + (n || "invitee") + ".png";
+}
+function imagesPretes(card){
+  return Promise.all([].map.call(card.querySelectorAll("img"), function(im){
+    if(im.complete && im.naturalWidth) return Promise.resolve();
+    return new Promise(function(res){ im.onload = im.onerror = res; });
+  }));
+}
+async function telechargerCarte(){
+  var btn = document.getElementById("dl");
   var card = document.getElementById("card");
-  var nom = (document.getElementById("g-nom").textContent || "invitation").replace(/[^a-z0-9]+/gi,"-");
-  html2canvas(card, {scale:2, backgroundColor:null, useCORS:true}).then(function(canvas){
+  var old = btn.textContent; btn.textContent = "Préparation…"; btn.disabled = true;
+  try{
+    await imagesPretes(card);
+    await new Promise(function(r){ setTimeout(r, 120); }); // laisse le rendu se stabiliser
+    var canvas = await html2canvas(card, {
+      scale: 2, backgroundColor: "#F5EFE1", useCORS: true,
+      width: card.offsetWidth, height: card.offsetHeight,
+      windowWidth: Math.max(document.documentElement.scrollWidth, 390)
+    });
     var a = document.createElement("a");
-    a.download = "invitation-" + nom + ".png";
+    a.download = nomFichier();
     a.href = canvas.toDataURL("image/png");
-    a.click();
-  });
-});
+    document.body.appendChild(a); a.click(); a.remove();
+  }catch(e){
+    alert("Téléchargement impossible sur cet appareil. Vous pouvez faire une capture d'écran de la carte.");
+  }
+  btn.textContent = old; btn.disabled = false;
+}
+document.getElementById("dl").addEventListener("click", telechargerCarte);
 
 // JSONP vers Apps Script (évite les soucis CORS)
 function fetchGuest(gid){
