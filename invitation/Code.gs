@@ -20,6 +20,7 @@
 // URL du déploiement du DOSSIER invitation/ (projet Vercel séparé). À compléter après déploiement.
 var INVITATION_URL = "https://wedding-emmanuel-ella.vercel.app";
 var SHEET_NAME = ""; // "" = 1re feuille. Sinon : nom exact de l'onglet des réponses.
+var LIST_TOKEN = "ee-2026-staff"; // jeton de l'entrée « liste » (scanner hors-ligne). NE PAS partager aux invités.
 var COL = {          // libellés cherchés (exact d'abord, sinon « contient »), insensible à la casse
   nom: "nom",
   present: "serez-vous",
@@ -29,7 +30,8 @@ var COL = {          // libellés cherchés (exact d'abord, sinon « contient »
   categorie: "catég",
   pointe: "pointé",
   heure: "heure pointage",
-  lien: "lien invitation"
+  lien: "lien invitation",
+  telecharger: "télécharger"
 };
 
 /** Menu dédié dans le Sheet (apparaît après rechargement de la page). */
@@ -72,7 +74,8 @@ function doGet(e) {
   var p = (e && e.parameter) || {};
   var out;
   try {
-    if (!p.id) out = { ok: false, error: "missing id" };
+    if (p.action === "list") out = listGuests_(p.token);
+    else if (!p.id) out = { ok: false, error: "missing id" };
     else if (p.action === "checkin") out = checkin_(p.id);
     else out = readGuest_(p.id);
   } catch (err) { out = { ok: false, error: String(err) }; }
@@ -81,6 +84,25 @@ function doGet(e) {
     return ContentService.createTextOutput(p.callback + "(" + json + ")")
       .setMimeType(ContentService.MimeType.JAVASCRIPT);
   return ContentService.createTextOutput(json).setMimeType(ContentService.MimeType.JSON);
+}
+
+/** Liste de tous les invités (pour le scanner hors-ligne). Protégée par jeton. */
+function listGuests_(token) {
+  if (String(token) !== LIST_TOKEN) return { ok: false, error: "unauthorized" };
+  var sh = getSheet_(), data = sh.getDataRange().getValues(), h = data[0];
+  var iId = idx_(h, COL.id), iNom = idx_(h, COL.nom), iPl = idx_(h, COL.places),
+      iTab = idx_(h, COL.table), iCat = idx_(h, COL.categorie), iPr = idx_(h, COL.present), iPt = idx_(h, COL.pointe);
+  var list = [];
+  for (var r = 1; r < data.length; r++) {
+    var id = iId > -1 ? String(data[r][iId]).trim() : "";
+    if (!id) continue;
+    list.push({
+      id: id, nom: iNom > -1 ? data[r][iNom] : "", places: iPl > -1 ? data[r][iPl] : "",
+      table: iTab > -1 ? data[r][iTab] : "", categorie: iCat > -1 ? data[r][iCat] : "",
+      present: iPr > -1 ? data[r][iPr] : "", pointe: iPt > -1 ? String(data[r][iPt]).trim() !== "" : false
+    });
+  }
+  return { ok: true, count: list.length, guests: list };
 }
 
 function findRow_(sh, iId, id) {
@@ -132,12 +154,16 @@ function attribuerIDs() {
 /** Remplit « Lien invitation » pour chaque invité ayant un ID. */
 function genererLiens() {
   var sh = getSheet_(), data = sh.getDataRange().getValues(), headers = data[0];
-  var iId = idx_(headers, COL.id), iLien = idx_(headers, COL.lien);
+  var iId = idx_(headers, COL.id), iLien = idx_(headers, COL.lien), iDl = idx_(headers, COL.telecharger);
   if (iId < 0 || iLien < 0) { SpreadsheetApp.getUi().alert("⚠️ Colonnes « ID » et « Lien invitation » requises (vois « Diagnostic »)."); return; }
   var n = 0;
   for (var r = 1; r < data.length; r++) {
     var id = String(data[r][iId]).trim();
-    if (id) { sh.getRange(r + 1, iLien + 1).setValue(INVITATION_URL + "/?id=" + id); n++; }
+    if (id) {
+      sh.getRange(r + 1, iLien + 1).setValue(INVITATION_URL + "/?id=" + id);
+      if (iDl > -1) sh.getRange(r + 1, iDl + 1).setValue(INVITATION_URL + "/?id=" + id + "&dl=1");
+      n++;
+    }
   }
-  SpreadsheetApp.getUi().alert(n + " lien(s) généré(s).");
+  SpreadsheetApp.getUi().alert(n + " lien(s) généré(s)" + (iDl > -1 ? " (+ liens de téléchargement)" : "") + ".");
 }

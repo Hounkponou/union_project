@@ -1,0 +1,214 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Scanner — Accueil Ella & Emmanuel</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="theme-color" content="#2a3320">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script>if("serviceWorker" in navigator){navigator.serviceWorker.register("sw.js").catch(function(){});}</script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Archivo:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{color-scheme:light;
+    --ink:#1b1f14;--panel:#2a3320;--panel2:#344028;--cream:#F5EFE1;--sage:#8CA06A;--sageL:#C9D8A8;
+    --ok:#7bbf6a;--warn:#E6CE8A;--err:#E6A892;
+    --disp:"Playfair Display",serif;--sans:"Archivo",Arial,sans-serif;}
+  *{box-sizing:border-box}
+  body{margin:0;min-height:100vh;background:var(--panel);color:var(--cream);font-family:var(--sans);
+    -webkit-font-smoothing:antialiased;padding:16px;
+    background-image:radial-gradient(80% 50% at 50% 0,rgba(140,160,106,.28),transparent 60%);}
+  .wrap{max-width:460px;margin:0 auto}
+  header{text-align:center;padding:10px 0 16px}
+  header .t{font-family:var(--disp);font-weight:600;font-size:22px}
+  header .s{font-weight:600;font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:var(--sageL);margin-top:4px}
+  .bar{display:flex;gap:10px;justify-content:space-between;align-items:center;background:rgba(0,0,0,.2);
+    border:1px solid rgba(245,239,225,.14);border-radius:14px;padding:12px 14px;font-size:12px;margin-bottom:12px}
+  .bar b{font-family:var(--disp);font-size:18px;font-weight:600}
+  .bar .col{text-align:center;flex:1}
+  .bar .lbl{display:block;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--sageL);margin-top:2px}
+  .net{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;text-align:center;margin-bottom:10px}
+  .net.on{color:var(--sageL)} .net.off{color:var(--warn)}
+  .btn{display:block;width:100%;border:none;cursor:pointer;font-family:var(--sans);font-weight:600;font-size:13px;
+    letter-spacing:.1em;text-transform:uppercase;padding:16px;border-radius:12px;margin:8px 0}
+  .btn-p{background:var(--cream);color:var(--panel)} .btn-p:disabled{opacity:.5}
+  .btn-g{background:transparent;color:var(--cream);border:1px solid rgba(245,239,225,.3)}
+  #reader{border-radius:16px;overflow:hidden;background:#000;margin:6px 0 4px}
+  #reader img[alt="Info icon"]{display:none}
+  .hint{text-align:center;font-size:12px;color:rgba(245,239,225,.7);margin:6px 0 14px}
+  /* résultat du scan */
+  .res{border-radius:18px;padding:22px 18px;text-align:center;margin:10px 0;border:2px solid}
+  .res--ok{background:rgba(123,191,106,.14);border-color:var(--ok)}
+  .res--warn{background:rgba(230,206,138,.12);border-color:var(--warn)}
+  .res--err{background:rgba(230,168,146,.12);border-color:var(--err)}
+  .res .ic{font-size:34px;line-height:1}
+  .res .nom{font-family:var(--disp);font-weight:600;font-size:24px;margin:8px 0 2px}
+  .res .st{font-weight:600;font-size:11px;letter-spacing:.18em;text-transform:uppercase}
+  .res--ok .st{color:var(--ok)} .res--warn .st{color:var(--warn)} .res--err .st{color:var(--err)}
+  .res .badges{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:12px}
+  .res .b{font-size:13px;background:rgba(245,239,225,.12);border:1px solid rgba(245,239,225,.25);border-radius:999px;padding:7px 14px}
+  .res .b i{font-style:normal;color:var(--sageL);font-size:9px;letter-spacing:.12em;text-transform:uppercase;display:block}
+  .muted{color:rgba(245,239,225,.6);font-size:12px;text-align:center}
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="t">Accueil</div>
+    <div class="s">Ella &amp; Emmanuel · Jour J</div>
+  </header>
+
+  <div class="net" id="net"></div>
+
+  <div class="bar">
+    <div class="col"><b id="cPointes">0</b><span class="lbl">Pointés</span></div>
+    <div class="col"><b id="cTotal">—</b><span class="lbl">Invités</span></div>
+    <div class="col"><b id="cSync">0</b><span class="lbl">À synchro.</span></div>
+  </div>
+
+  <div id="setup">
+    <p class="muted" id="listeInfo">Liste non chargée.</p>
+    <button class="btn btn-p" id="load">📥 Charger la liste (internet requis)</button>
+    <p class="hint">À faire une fois, avec connexion, avant l'événement. Ensuite le scan fonctionne hors-ligne.</p>
+  </div>
+
+  <div id="scanZone" hidden>
+    <div id="reader"></div>
+    <p class="hint">Visez le QR code de l'invité.</p>
+    <div id="result"></div>
+    <button class="btn btn-g" id="sync">🔄 Synchroniser les pointages</button>
+    <button class="btn btn-g" id="reload">↻ Recharger la liste</button>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
+<script>
+var APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwjQebDm7qsCdHh31LlfTqVwUo6jlZNwxI_2TotySQITzvsnISIUY-2cXNhARhk6mg/exec";
+var LIST_TOKEN = "ee-2026-staff";
+var K = { guests:"ee_guests", at:"ee_guests_at", checks:"ee_checkins" };
+
+function load(k,d){ try{ return JSON.parse(localStorage.getItem(k)) || d; }catch(e){ return d; } }
+function save(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+var guests = load(K.guests, null);           // { id: {nom,table,categorie,places,pointe} }
+var checks = load(K.checks, {});             // { id: {at, synced} }
+
+// ---- réseau ----
+function setNet(){
+  var n=document.getElementById("net");
+  if(navigator.onLine){ n.className="net on"; n.textContent="● En ligne"; }
+  else { n.className="net off"; n.textContent="○ Hors-ligne — les pointages seront synchronisés plus tard"; }
+}
+window.addEventListener("online", function(){ setNet(); refresh(); });
+window.addEventListener("offline", setNet);
+
+// ---- compteurs ----
+function pending(){ return Object.keys(checks).filter(function(id){ return !checks[id].synced; }).length; }
+function pointes(){ var s={}; Object.keys(checks).forEach(function(id){s[id]=1;}); if(guests) Object.keys(guests).forEach(function(id){ if(guests[id].pointe) s[id]=1; }); return Object.keys(s).length; }
+function refresh(){
+  document.getElementById("cTotal").textContent = guests ? Object.keys(guests).length : "—";
+  document.getElementById("cPointes").textContent = pointes();
+  document.getElementById("cSync").textContent = pending();
+  var loaded = !!guests;
+  document.getElementById("setup").hidden = loaded;
+  document.getElementById("scanZone").hidden = !loaded;
+  if(loaded){
+    var at = localStorage.getItem(K.at);
+    document.getElementById("listeInfo").textContent = "";
+  }
+}
+
+// ---- chargement de la liste (JSONP) ----
+function fetchList(cb){
+  var fn="__list"+Date.now();
+  window[fn]=function(d){ cb(d); try{delete window[fn];}catch(e){} };
+  var s=document.createElement("script");
+  s.src=APPS_SCRIPT_URL+"?action=list&token="+encodeURIComponent(LIST_TOKEN)+"&callback="+fn;
+  s.onerror=function(){ cb(null); };
+  document.body.appendChild(s);
+}
+function doLoad(btn){
+  if(!navigator.onLine){ alert("Connexion internet requise pour charger la liste."); return; }
+  var old=btn.textContent; btn.textContent="Chargement…"; btn.disabled=true;
+  fetchList(function(d){
+    btn.textContent=old; btn.disabled=false;
+    if(!d || !d.ok){ alert("Échec du chargement (jeton ou connexion)."); return; }
+    var map={};
+    d.guests.forEach(function(g){ map[String(g.id).trim()]={nom:g.nom,table:g.table,categorie:g.categorie,places:g.places,pointe:!!g.pointe}; });
+    guests=map; save(K.guests,guests); localStorage.setItem(K.at,new Date().toISOString());
+    refresh(); startScanner();
+    alert(d.count+" invités chargés. Le scan fonctionne maintenant même hors-ligne.");
+  });
+}
+
+// ---- extraction de l'ID depuis le QR ----
+function parseId(text){
+  if(!text) return "";
+  text=String(text).trim();
+  var m=text.match(/[?&]id=([^&]+)/i);
+  if(m) return decodeURIComponent(m[1]).trim();
+  return text; // QR contenant juste l'ID
+}
+
+// ---- affichage résultat ----
+function showRes(cls, ic, nom, st, g){
+  var b="";
+  if(g){ if(g.places)b+='<span class="b"><i>Places</i>'+g.places+'</span>'; if(g.table)b+='<span class="b"><i>Table</i>'+g.table+'</span>'; if(g.categorie)b+='<span class="b"><i>Catégorie</i>'+g.categorie+'</span>'; }
+  document.getElementById("result").innerHTML =
+    '<div class="res res--'+cls+'"><div class="ic">'+ic+'</div>'+
+    '<div class="nom">'+(nom||'')+'</div><div class="st">'+st+'</div>'+
+    (b?'<div class="badges">'+b+'</div>':'')+'</div>';
+}
+
+// ---- traitement d'un scan ----
+var lastId="", lastAt=0;
+function onScan(text){
+  var id=parseId(text); if(!id) return;
+  var now=Date.now();
+  if(id===lastId && now-lastAt<3000) return; // anti-rebond
+  lastId=id; lastAt=now;
+  if(!guests || !guests[id]){ showRes("err","⚠️","QR inconnu","Non reconnu",null); beep(180); return; }
+  var g=guests[id];
+  var already = (checks[id] || g.pointe);
+  if(already){ showRes("warn","ℹ️",g.nom,"Déjà pointé(e)",g); beep(140); }
+  else{
+    checks[id]={at:new Date().toISOString(), synced:false}; save(K.checks,checks);
+    g.pointe=true; save(K.guests,guests);
+    showRes("ok","✓",g.nom,"Bienvenue · Présence confirmée",g); beep(90);
+    if(navigator.onLine) syncOne(id);
+  }
+  refresh();
+}
+function beep(f){ try{ var a=new (window.AudioContext||window.webkitAudioContext)(); var o=a.createOscillator(); o.frequency.value=f*4; o.connect(a.destination); o.start(); setTimeout(function(){o.stop();a.close();},90); }catch(e){} }
+
+// ---- synchronisation ----
+function syncOne(id){
+  var fn="__s"+id.replace(/[^a-z0-9]/gi,"")+Date.now();
+  window[fn]=function(d){ if(d&&d.ok){ if(checks[id]){ checks[id].synced=true; save(K.checks,checks); refresh(); } } try{delete window[fn];}catch(e){} };
+  var s=document.createElement("script");
+  s.src=APPS_SCRIPT_URL+"?action=checkin&id="+encodeURIComponent(id)+"&callback="+fn;
+  s.onerror=function(){};
+  document.body.appendChild(s);
+}
+function syncAll(){
+  if(!navigator.onLine){ alert("Hors-ligne : impossible de synchroniser maintenant."); return; }
+  var ids=Object.keys(checks).filter(function(id){ return !checks[id].synced; });
+  if(!ids.length){ alert("Rien à synchroniser."); return; }
+  ids.forEach(function(id,i){ setTimeout(function(){ syncOne(id); }, i*250); });
+  alert(ids.length+" pointage(s) en cours de synchronisation…");
+}
+
+// ---- caméra ----
+var scannerStarted=false;
+function startScanner(){
+  if(scannerStarted || typeof Html5QrcodeScanner==="undefined") return;
+  scannerStarted=true;
+  var sc=new Html5QrcodeScanner("reader",{fps:10,qrbox:{width:230,height:230},rememberLastUsedCamera:true,showTorchButtonIfSupported:true},false);
+  sc.render(function(t){ onScan(t); }, function(){});
+}
+
+// ---- init ----
+document.getElementById("load").addEventListener("click", function(){ doLoad(this); });
+document.getElementById("reload").addEventListener("click", function(){ doLoad(document.getElementById("load")); });
+document.getElementById("sync").addEventListener("click", syncAll);
+setNet(); refresh();
+if(guests) startScanner();
+</script>
