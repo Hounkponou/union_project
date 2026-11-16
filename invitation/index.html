@@ -78,6 +78,41 @@
   .btn-ghost{background:transparent;color:var(--ink);border:1px solid var(--line);padding:14px 26px;border-radius:999px}
   .btn-ghost:hover{border-color:var(--sage);color:var(--sage-deep)}
   .foot{text-align:center;margin-top:34px;font-family:var(--sans);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-soft)}
+
+  /* ===== CARTE DÉDIÉE AU TÉLÉCHARGEMENT (vraies proportions, format invitation) ===== */
+  #dlcard{position:absolute;left:-10000px;top:0;width:1000px;background:var(--ivory);color:var(--ink);font-family:var(--sans)}
+  #dlcard .fr{margin:26px;border:1.5px solid rgba(83,102,58,.45);border-radius:10px;padding:52px 60px 40px;display:flex;flex-direction:column;align-items:center;text-align:center}
+  #dlcard .eb{font-weight:600;font-size:16px;letter-spacing:.42em;text-transform:uppercase;color:var(--sage-deep)}
+  #dlcard .ph{width:560px;height:360px;margin:34px 0 4px;border-radius:12px;overflow:hidden;border:1px solid rgba(36,34,28,.15)}
+  #dlcard .ph img{width:100%;height:100%;object-fit:cover;object-position:50% 20%}
+  #dlcard .nm{font-family:var(--disp);font-weight:500;font-size:92px;line-height:1.0;letter-spacing:-.01em;margin:26px 0 0}
+  #dlcard .nm .amp{display:block;font-style:italic;font-weight:400;font-size:.5em;color:var(--sage-deep);margin:.03em 0}
+  #dlcard .sp{margin:24px 0 0}
+  #dlcard .inv{font-family:var(--disp);font-style:italic;font-weight:400;font-size:30px;line-height:1.4;color:var(--ink-soft);max-width:22ch;margin:18px auto 0}
+  #dlcard .greet{font-family:var(--disp);font-weight:400;font-size:34px;color:var(--ink);margin:30px 0 0}
+  #dlcard .greet b{color:var(--sage-deep);font-weight:600}
+  #dlcard .date{font-family:var(--disp);font-weight:600;font-size:44px;margin:30px 0 0}
+  #dlcard .loc{font-weight:600;font-size:15px;letter-spacing:.22em;text-transform:uppercase;color:var(--ink-soft);margin-top:10px}
+  #dlcard .prog{display:flex;gap:40px;justify-content:center;margin:34px 0 0;width:100%}
+  #dlcard .prog .ev{flex:1;border-top:1.5px solid rgba(83,102,58,.3);padding-top:18px}
+  #dlcard .prog .h{font-weight:700;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--blue-deep)}
+  #dlcard .prog .v{font-family:var(--disp);font-weight:500;font-size:25px;margin:8px 0 4px}
+  #dlcard .prog .a{font-size:15px;color:var(--ink-soft)}
+  #dlcard .pass{display:flex;align-items:center;gap:26px;justify-content:center;margin:36px 0 0;background:rgba(140,160,106,.12);border:1px solid rgba(83,102,58,.25);border-radius:16px;padding:24px 30px}
+  #dlcard .pass .qrb{background:#fff;padding:12px;border-radius:12px;border:1px solid rgba(36,34,28,.12)}
+  #dlcard .pass .qrb img,#dlcard .pass .qrb canvas{width:160px;height:160px;display:block}
+  #dlcard .pass .info{text-align:left}
+  #dlcard .pass .t{font-weight:700;font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--sage-deep)}
+  #dlcard .pass .badges{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0 0}
+  #dlcard .pass .b{font-size:16px;background:#fff;border:1px solid rgba(83,102,58,.3);border-radius:999px;padding:7px 16px}
+  #dlcard .pass .b i{font-style:normal;color:var(--sage-deep);font-size:9px;letter-spacing:.12em;text-transform:uppercase;display:block;margin-bottom:2px}
+  #dlcard .pass .sub{font-size:13px;color:var(--ink-soft);margin-top:10px}
+  #dlcard .verse2{font-family:var(--disp);font-style:italic;font-weight:400;font-size:20px;line-height:1.5;color:var(--ink-soft);max-width:36ch;margin:36px auto 0}
+  #dlcard .verse2 cite{display:block;font-style:normal;font-weight:600;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--sage-deep);margin-top:10px}
+  #dlcard .dress2{font-size:14px;letter-spacing:.05em;color:var(--ink-soft);margin-top:22px}
+  #dlcard .dress2 b{color:var(--sage-deep);letter-spacing:.14em;text-transform:uppercase;font-size:12px}
+  #dlcard .fl{width:100%;height:130px;margin-top:30px;border-radius:10px;overflow:hidden}
+  #dlcard .fl img{width:100%;height:100%;object-fit:cover;object-position:50% 42%}
 </style>
 
 <div class="wrap">
@@ -144,6 +179,45 @@
     </div>
 
     <p class="foot">Au plaisir de vous y retrouver · E &amp; E</p>
+
+    <!-- ===== CARTE DÉDIÉE AU TÉLÉCHARGEMENT (hors-écran, format invitation) ===== -->
+    <div id="dlcard" aria-hidden="true">
+      <div class="fr">
+        <div class="eb">Invitation officielle</div>
+        <div class="ph"><img src="img/couple-bw.jpg" alt=""></div>
+        <h2 class="nm">Ella<span class="amp">&amp;</span>Emmanuel</h2>
+        <div class="sp">
+          <svg width="96" height="32" viewBox="0 0 96 32" fill="none" aria-hidden="true">
+            <path d="M48 31 C48 21 48 13 48 4" stroke="#8CA06A" stroke-width="1.3" stroke-linecap="round"/>
+            <g fill="#8CA06A">
+              <ellipse cx="40" cy="13" rx="4.6" ry="8.4" transform="rotate(-38 40 13)"/><ellipse cx="56" cy="13" rx="4.6" ry="8.4" transform="rotate(38 56 13)"/>
+              <ellipse cx="41" cy="22" rx="4" ry="7.2" transform="rotate(-38 41 22)"/><ellipse cx="55" cy="22" rx="4" ry="7.2" transform="rotate(38 55 22)"/>
+              <ellipse cx="48" cy="5" rx="3.4" ry="6"/>
+            </g>
+          </svg>
+        </div>
+        <p class="inv">ont la joie de vous convier à célébrer leur mariage</p>
+        <p class="greet">Cher(e) <b id="dl-nom">—</b></p>
+        <div class="date">Samedi 26 décembre 2026</div>
+        <div class="loc">Cotonou · Bénin</div>
+        <div class="prog">
+          <div class="ev"><div class="h">15h00 · Cérémonie</div><div class="v">Église Saint-Jean</div><div class="a">de Gbégamey, Cotonou</div></div>
+          <div class="ev"><div class="h">18h00 · Réception</div><div class="v">Le Palais des Anges</div><div class="a">Fidjrossè, Cotonou</div></div>
+        </div>
+        <div class="pass">
+          <div class="qrb"><div id="dl-qr"></div></div>
+          <div class="info">
+            <div class="t">Votre pass d'entrée</div>
+            <div class="badges" id="dl-badges"></div>
+            <div class="sub">À présenter à l'accueil de la réception.</div>
+          </div>
+        </div>
+        <p class="verse2">« Par-dessus tout, revêtez-vous de l'amour, qui est le lien de la perfection. »
+          <cite>Colossiens 3.14</cite></p>
+        <div class="dress2"><b>Dress code</b> &nbsp;·&nbsp; Chic &amp; élégant — une touche de vert sauge ou de bleu clair</div>
+        <div class="fl"><img src="img/flowers.jpg" alt=""></div>
+      </div>
+    </div>
   </div>
 
   <div id="error" class="state err" hidden></div>
@@ -181,20 +255,27 @@ function render(guest){
   if(guest.date) document.getElementById("g-date").textContent = guest.date;
   if(guest.ville) document.getElementById("g-ville").textContent = guest.ville;
 
-  // badges table / catégorie
-  var b = document.getElementById("g-badges");
-  b.innerHTML = "";
-  if(guest.places) b.innerHTML += '<span class="badge"><span class="lbl">Places</span>'+guest.places+'</span>';
-  if(guest.table)  b.innerHTML += '<span class="badge"><span class="lbl">Table</span>'+guest.table+'</span>';
-  if(guest.categorie) b.innerHTML += '<span class="badge"><span class="lbl">Catégorie</span>'+guest.categorie+'</span>';
+  // badges — carte web
+  var bw = "";
+  if(guest.places) bw += '<span class="badge"><span class="lbl">Places</span>'+guest.places+'</span>';
+  if(guest.table)  bw += '<span class="badge"><span class="lbl">Table</span>'+guest.table+'</span>';
+  if(guest.categorie) bw += '<span class="badge"><span class="lbl">Catégorie</span>'+guest.categorie+'</span>';
+  document.getElementById("g-badges").innerHTML = bw;
 
-  // QR (encode l'identifiant pour le pointage)
+  // carte téléchargeable : nom + badges
+  document.getElementById("dl-nom").textContent = guest.nom;
+  var bd = "";
+  if(guest.places) bd += '<span class="b"><i>Places</i>'+guest.places+'</span>';
+  if(guest.table)  bd += '<span class="b"><i>Table</i>'+guest.table+'</span>';
+  if(guest.categorie) bd += '<span class="b"><i>Catégorie</i>'+guest.categorie+'</span>';
+  document.getElementById("dl-badges").innerHTML = bd;
+
+  // QR (encode le lien de pointage) — carte web ET carte téléchargeable
   var code = guest.id || id;
   if(code){
-    new QRCode(document.getElementById("qr"), {
-      text: location.origin + "/checkin.html?id=" + encodeURIComponent(code), width:150, height:150,
-      colorDark:"#2a3026", colorLight:"#ffffff", correctLevel: QRCode.CorrectLevel.M
-    });
+    var qrUrl = location.origin + "/checkin.html?id=" + encodeURIComponent(code);
+    new QRCode(document.getElementById("qr"),    { text: qrUrl, width:150, height:150, colorDark:"#2a3026", colorLight:"#ffffff", correctLevel: QRCode.CorrectLevel.M });
+    new QRCode(document.getElementById("dl-qr"), { text: qrUrl, width:160, height:160, colorDark:"#2a3026", colorLight:"#ffffff", correctLevel: QRCode.CorrectLevel.M });
     document.getElementById("g-id").textContent = "RÉF. " + code;
   } else {
     hide(document.getElementById("qrwrap"));
@@ -219,15 +300,14 @@ function imagesPretes(card){
 }
 async function telechargerCarte(){
   var btn = document.getElementById("dl");
-  var card = document.getElementById("card");
+  var card = document.getElementById("dlcard"); // carte dédiée au téléchargement (format invitation)
   var old = btn.textContent; btn.textContent = "Préparation…"; btn.disabled = true;
   try{
     await imagesPretes(card);
-    await new Promise(function(r){ setTimeout(r, 120); }); // laisse le rendu se stabiliser
+    await new Promise(function(r){ setTimeout(r, 150); }); // laisse le rendu se stabiliser
     var canvas = await html2canvas(card, {
       scale: 2, backgroundColor: "#F5EFE1", useCORS: true,
-      width: card.offsetWidth, height: card.offsetHeight,
-      windowWidth: Math.max(document.documentElement.scrollWidth, 390)
+      width: 1000, height: card.offsetHeight, windowWidth: 1200, windowHeight: card.offsetHeight + 200
     });
     var a = document.createElement("a");
     a.download = nomFichier();
