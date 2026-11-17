@@ -1,5 +1,5 @@
-/* Service worker — rend l'invitation + le scanner consultables hors-ligne. */
-var CACHE = "ee-inv-v1";
+/* Service worker — invitation + scanner consultables hors-ligne. */
+var CACHE = "ee-inv-v2";
 var CORE = [
   "./", "index.html", "checkin.html", "scanner.html",
   "favicon.svg", "mariage.ics", "manifest.webmanifest",
@@ -24,9 +24,26 @@ self.addEventListener("activate", function (e) {
 self.addEventListener("fetch", function (e) {
   if (e.request.method !== "GET") return;
   var url = e.request.url;
-  // Données dynamiques (Apps Script) : toujours le réseau, jamais le cache.
+  // Données dynamiques (Apps Script) : toujours réseau, jamais cache.
   if (url.indexOf("script.google.com") > -1 || url.indexOf("googleusercontent.com") > -1) return;
-  // Le reste (pages, images, polices, librairies CDN) : cache d'abord, puis réseau.
+
+  var accept = e.request.headers.get("accept") || "";
+  var isDoc = e.request.mode === "navigate" || e.request.destination === "document" || accept.indexOf("text/html") > -1;
+
+  if (isDoc) {
+    // PAGES : réseau d'abord (dernière version), cache en secours (hors-ligne).
+    e.respondWith(
+      fetch(e.request).then(function (res) {
+        try { var c = res.clone(); caches.open(CACHE).then(function (ch) { ch.put(e.request, c); }); } catch (x) {}
+        return res;
+      }).catch(function () {
+        return caches.match(e.request).then(function (h) { return h || caches.match("index.html"); });
+      })
+    );
+    return;
+  }
+
+  // ASSETS (images, polices, librairies) : cache d'abord, réseau en secours.
   e.respondWith(
     caches.match(e.request).then(function (hit) {
       if (hit) return hit;

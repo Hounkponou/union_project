@@ -124,9 +124,11 @@
   #dlcard .foot .ln{height:1px;background:var(--sage);width:96px}
   #dlcard .foot .t{font-family:var(--disp);font-size:20px;color:var(--ink)}
   #dlcard .foot .t b{letter-spacing:.06em;color:var(--sage-deep)}
-  #dlcard .band{height:96px;margin-top:14px;border-radius:7px;overflow:hidden;position:relative;border:1px solid rgba(83,102,58,.22)}
-  #dlcard .band img{width:100%;height:100%;object-fit:cover;object-position:50% 60%;display:block}
-  #dlcard .band::after{content:"";position:absolute;inset:0;background:linear-gradient(to right,rgba(243,237,223,.6),rgba(243,237,223,0) 22%,rgba(243,237,223,0) 78%,rgba(243,237,223,.6))}
+  #dlcard .right{position:relative}
+  #dlcard .right > :not(.wm){position:relative;z-index:1}
+  #dlcard .wm{position:absolute;top:-16px;left:50%;width:366px;margin-left:-183px;opacity:.1;z-index:0}
+  #dlcard .medal{width:82px;height:82px;border-radius:50%;overflow:hidden;border:2px solid var(--sage);margin:0 auto 12px;box-shadow:0 9px 20px -9px rgba(44,54,30,.55)}
+  #dlcard .medal img{width:100%;height:100%;object-fit:cover;object-position:50% 66%;display:block}
 </style>
 
 <div class="wrap">
@@ -208,6 +210,8 @@
             <div class="label"><span class="ln"></span>Invitation officielle<span class="ln"></span></div>
           </div>
           <div class="right">
+            <img class="wm" src="img/watermark.png" alt="">
+            <div class="medal"><img src="img/flowers.jpg" alt=""></div>
             <h2 class="names">Ella <span class="amp">&amp;</span> Emmanuel</h2>
             <p class="greet"><span class="lbl">Cher(e)</span> <b id="dl-nom">—</b></p>
             <p class="conv">C'est avec joie que nous vous convions à célébrer notre union.</p>
@@ -231,7 +235,6 @@
           </div>
         </div>
         <div class="foot"><span class="ln"></span><span class="t"><b>DRESS CODE</b> &nbsp;·&nbsp; Chic &amp; élégant</span><span class="ln"></span></div>
-        <div class="band"><img src="img/flowers.jpg" alt=""></div>
       </div>
     </div>
   </div>
