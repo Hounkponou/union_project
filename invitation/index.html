@@ -27,6 +27,9 @@
   /* ----- état chargement / erreur ----- */
   .state{text-align:center;padding:80px 20px;font-family:var(--disp);font-style:italic;font-size:22px;color:var(--ink-soft)}
   .state.err{font-style:normal;font-family:var(--sans);font-size:15px}
+  .state.err strong{display:block;font-family:var(--disp);font-size:22px;color:var(--ink);margin-bottom:10px}
+  .state.err .hint{display:block;max-width:34ch;margin:0 auto;font-size:13.5px;line-height:1.5;color:var(--ink-soft)}
+  .state.err .retry{margin:22px auto 0}
 
   /* ----- LA CARTE (téléchargeable) ----- */
   .card{position:relative;background:var(--ivory);border-radius:20px;overflow:hidden;
@@ -307,7 +310,7 @@ function render(guest){
 
   hide(document.getElementById("loading"));
   show(document.getElementById("content"));
-  if(params.get("dl") === "1"){ setTimeout(telechargerCarte, 600); } // auto-téléchargement (lien ?id=...&dl=1)
+  if(params.get("dl") === "1"){ setTimeout(function(){ telechargerCarte(false); }, 600); } // auto-téléchargement (lien ?id=...&dl=1)
 }
 
 // Téléchargement de la carte en image (fiabilisé : attente des images, largeur figée, fond ivoire)
@@ -322,10 +325,12 @@ function imagesPretes(card){
     return new Promise(function(res){ im.onload = im.onerror = res; });
   }));
 }
-async function telechargerCarte(){
+async function telechargerCarte(ev){
+  var gesture = ev !== false;                 // false = appel auto (?dl=1), sans geste utilisateur
   var btn = document.getElementById("dl");
   var card = document.getElementById("dlcard"); // carte dédiée au téléchargement (format invitation)
   var old = btn.textContent; btn.textContent = "Préparation…"; btn.disabled = true;
+  function fini(){ btn.textContent = old; btn.disabled = false; }
   try{
     await imagesPretes(card);
     await new Promise(function(r){ setTimeout(r, 150); }); // laisse le rendu se stabiliser
@@ -333,25 +338,63 @@ async function telechargerCarte(){
       scale: 2, backgroundColor: "#F6F1E4", useCORS: true,
       width: 1200, height: 800, windowWidth: 1400, windowHeight: 1000
     });
+    var fname = nomFichier();
+    var blob = await new Promise(function(res){ canvas.toBlob(res, "image/png"); });
+
+    // 1) Partage natif (mobile) : ouvre « Enregistrer l'image / Envoyer » — marche sur iOS & Android
+    if(gesture && blob && navigator.canShare){
+      try{
+        var file = new File([blob], fname, { type: "image/png" });
+        if(navigator.canShare({ files: [file] })){
+          await navigator.share({ files: [file], title: "Invitation — Ella & Emmanuel" });
+          return fini();                      // partagé / enregistré : terminé
+        }
+      }catch(err){
+        if(err && err.name === "AbortError") return fini(); // annulé : ne pas forcer un 2e téléchargement
+        // sinon : partage non supporté -> on tente le téléchargement classique
+      }
+    }
+
+    // 2) Téléchargement classique (PC + Android Chrome)
+    var url = blob ? URL.createObjectURL(blob) : canvas.toDataURL("image/png");
     var a = document.createElement("a");
-    a.download = nomFichier();
-    a.href = canvas.toDataURL("image/png");
+    a.download = fname; a.href = url; a.rel = "noopener";
     document.body.appendChild(a); a.click(); a.remove();
+    if(blob) setTimeout(function(){ URL.revokeObjectURL(url); }, 5000);
+
+    // 3) iOS Safari ignore a.download : on ouvre l'image dans un onglet -> appui long « Enregistrer »
+    if(blob && /iPad|iPhone|iPod/.test(navigator.userAgent)){
+      setTimeout(function(){ try{ window.open(URL.createObjectURL(blob), "_blank"); }catch(x){} }, 300);
+    }
   }catch(e){
-    alert("Téléchargement impossible sur cet appareil. Vous pouvez faire une capture d'écran de la carte.");
+    alert("Téléchargement impossible sur cet appareil. Faites une capture d'écran de la carte.");
   }
-  btn.textContent = old; btn.disabled = false;
+  fini();
 }
 document.getElementById("dl").addEventListener("click", telechargerCarte);
 
-// JSONP vers Apps Script (évite les soucis CORS)
+// JSONP vers Apps Script (évite les soucis CORS) — avec délai d'attente + nouvelle tentative
 function fetchGuest(gid){
+  hide(document.getElementById("error"));
+  show(document.getElementById("loading"));
   var fn = "__cb" + Date.now();
-  window[fn] = function(data){ render(data); try{delete window[fn];}catch(e){} };
   var s = document.createElement("script");
-  s.src = APPS_SCRIPT_URL + "?id=" + encodeURIComponent(gid) + "&callback=" + fn;
-  s.onerror = function(){ fail("Connexion impossible. Réessayez plus tard."); };
+  var done = false;
+  var to = setTimeout(function(){ if(!done){ done = true; nettoie(); erreurReseau(gid); } }, 15000);
+  function nettoie(){ clearTimeout(to); try{ delete window[fn]; }catch(e){} if(s.parentNode) s.parentNode.removeChild(s); }
+  window[fn] = function(data){ if(done) return; done = true; nettoie(); render(data); };
+  s.onerror = function(){ if(!done){ done = true; nettoie(); erreurReseau(gid); } };
+  s.src = APPS_SCRIPT_URL + "?id=" + encodeURIComponent(gid) + "&callback=" + fn + "&t=" + Date.now();
   document.body.appendChild(s);
+}
+function erreurReseau(gid){
+  window.__gid = gid;
+  fail('<strong>Connexion impossible</strong>'
+     + '<span class="hint">Impossible de charger votre invitation pour le moment. '
+     + 'Vérifiez votre connexion internet, puis réessayez.<br>'
+     + 'Si vous avez ouvert le lien depuis WhatsApp ou Messenger, ouvrez-le plutôt dans votre navigateur '
+     + '(menu ⋯ en haut à droite → « Ouvrir dans le navigateur / Chrome / Safari »).</span>'
+     + '<button class="btn btn-primary retry" onclick="fetchGuest(window.__gid)">Réessayer</button>');
 }
 
 // ---- Démarrage ----
