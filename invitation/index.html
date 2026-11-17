@@ -80,47 +80,53 @@
   .foot{text-align:center;margin-top:34px;font-family:var(--sans);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-soft)}
 
   /* ===== CARTE D'INVITATION — FORMAT PAYSAGE (téléchargement) ===== */
-  #dlcard{position:absolute;left:-10000px;top:0;width:1200px;height:800px;background:#F6F1E4;color:var(--ink);font-family:var(--sans);overflow:hidden}
-  #dlcard .f1{position:absolute;inset:16px;border:2px solid #9c8445;border-radius:3px}
-  #dlcard .f2{position:absolute;inset:24px;border:1px solid rgba(156,132,69,.5);border-radius:3px}
-  #dlcard .cnr{position:absolute;width:160px;height:160px;z-index:3}
-  #dlcard .cnr.tl{top:6px;left:6px}
-  #dlcard .cnr.tr{top:6px;left:1034px}
-  #dlcard .cnr.bl{top:634px;left:6px}
-  #dlcard .cnr.br{top:634px;left:1034px}
-  #dlcard .in{position:absolute;inset:48px;display:flex;flex-direction:column;z-index:2}
-  #dlcard .main{flex:1;display:grid;grid-template-columns:350px 1fr;gap:46px;align-items:center}
+  #dlcard{position:absolute;left:-10000px;top:0;width:1200px;height:800px;background:#F3EDDF;color:var(--ink);font-family:var(--sans);overflow:hidden}
+  #dlcard .f1{position:absolute;inset:18px;border:1.5px solid var(--sage-deep);border-radius:2px}
+  #dlcard .f2{position:absolute;inset:27px;border:1px solid rgba(83,102,58,.35);border-radius:2px}
+  #dlcard .cnr{position:absolute;width:150px;height:150px;z-index:3}
+  #dlcard .cnr.tl{top:10px;left:10px}
+  #dlcard .cnr.tr{top:10px;left:1040px}
+  #dlcard .cnr.bl{top:640px;left:10px}
+  #dlcard .cnr.br{top:640px;left:1040px}
+  #dlcard .in{position:absolute;top:48px;left:52px;right:52px;bottom:38px;display:flex;flex-direction:column;z-index:2}
+  #dlcard .main{flex:1;display:grid;grid-template-columns:352px 1fr;gap:46px;align-items:center}
   #dlcard .left{display:flex;flex-direction:column;align-items:center;justify-content:center}
-  #dlcard .ph{width:318px;height:424px;background:#fff;padding:7px;outline:1px solid #9c8445}
+  #dlcard .ph{width:312px;height:408px;background:#fff;padding:9px;border:1px solid rgba(83,102,58,.5);box-shadow:0 16px 36px -20px rgba(44,54,30,.55)}
   #dlcard .ph img{width:100%;height:100%;object-fit:cover;object-position:50% 20%;display:block}
-  #dlcard .badge{margin-top:18px;background:var(--sage);color:#fff;font-weight:600;font-size:12px;letter-spacing:.2em;text-transform:uppercase;padding:9px 22px;border-radius:999px}
-  #dlcard .fl2{width:300px;height:110px;margin-top:20px;border-radius:8px;overflow:hidden;border:1px solid rgba(156,132,69,.4)}
-  #dlcard .fl2 img{width:100%;height:100%;object-fit:cover;object-position:50% 52%;display:block}
+  #dlcard .label{display:flex;align-items:center;gap:14px;margin-top:26px;color:var(--sage-deep);font-weight:600;font-size:13px;letter-spacing:.26em;text-transform:uppercase}
+  #dlcard .label .ln{width:30px;height:1px;background:var(--sage)}
   #dlcard .right{text-align:center;display:flex;flex-direction:column;align-items:center}
-  #dlcard .names{font-family:var(--disp);font-weight:500;font-size:62px;line-height:1;color:#595747;margin:0}
-  #dlcard .names .amp{color:var(--sage-deep);font-weight:400}
-  #dlcard .greet{font-family:var(--disp);font-size:27px;color:var(--ink);margin:16px 0 0}
-  #dlcard .conv{font-size:19px;color:var(--ink);margin:10px auto 0;max-width:34ch;line-height:1.4}
-  #dlcard .hr{width:160px;height:1px;background:#9c8445;margin:16px auto}
-  #dlcard .date{font-family:var(--disp);font-weight:600;font-size:30px;margin:0}
-  #dlcard .city{font-size:19px;color:var(--ink);margin-top:2px}
-  #dlcard .boxes{display:flex;gap:18px;margin:20px 0 0}
-  #dlcard .box{border:1px solid var(--sage-deep);border-radius:4px;padding:11px 30px;font-size:21px;color:var(--ink);letter-spacing:.02em}
+  #dlcard .names{font-family:var(--disp);font-weight:500;font-size:60px;line-height:1.02;color:#4c5338;margin:0}
+  #dlcard .names .amp{color:var(--sage);font-weight:400;font-style:italic}
+  #dlcard .greet{font-family:var(--disp);font-size:27px;color:var(--ink);margin:14px 0 0}
+  #dlcard .greet .lbl{font-style:italic;color:var(--ink-soft)}
+  #dlcard .greet b{color:var(--sage-deep);font-weight:600}
+  #dlcard .conv{font-size:18px;color:var(--ink);margin:10px auto 0;max-width:34ch;line-height:1.45}
+  #dlcard .hr{display:flex;align-items:center;gap:11px;margin:18px auto}
+  #dlcard .hr .l{width:72px;height:1px;background:var(--sage-deep)}
+  #dlcard .hr .d{width:6px;height:6px;border-radius:50%;background:var(--blue-deep)}
+  #dlcard .date{font-family:var(--disp);font-weight:600;font-size:29px;margin:0;color:var(--ink)}
+  #dlcard .city{font-size:15px;letter-spacing:.22em;text-transform:uppercase;color:var(--ink-soft);margin-top:6px}
+  #dlcard .boxes{display:flex;gap:16px;margin:20px 0 0}
+  #dlcard .box{border:1px solid var(--sage-deep);border-radius:4px;padding:10px 28px;font-size:19px;color:var(--ink);letter-spacing:.04em}
   #dlcard .box b{font-weight:700;color:var(--sage-deep)}
-  #dlcard .sub{display:flex;align-items:center;gap:30px;margin:24px 0 0}
-  #dlcard .qrb{border:5px solid #9c8445;background:#fff;padding:5px;flex:none}
-  #dlcard .qrb img,#dlcard .qrb canvas{width:118px;height:118px;display:block}
-  #dlcard .qrt{text-align:center;font-size:13px;color:var(--ink-soft);max-width:12ch;line-height:1.35}
-  #dlcard .qrt b{display:block;color:var(--ink);font-weight:600;letter-spacing:.08em;margin-bottom:6px}
+  #dlcard .sub{display:flex;align-items:center;gap:26px;margin:22px 0 0}
+  #dlcard .qrb{border:4px solid var(--sage-deep);background:#fff;padding:5px;flex:none;border-radius:4px}
+  #dlcard .qrb img,#dlcard .qrb canvas{width:112px;height:112px;display:block}
+  #dlcard .qrt{text-align:center;font-size:12px;color:var(--ink-soft);max-width:12ch;line-height:1.35}
+  #dlcard .qrt b{display:block;color:var(--ink);font-weight:600;letter-spacing:.06em;margin-bottom:5px}
   #dlcard .times{text-align:left}
-  #dlcard .times .r{display:flex;align-items:baseline;gap:10px;margin:2px 0}
-  #dlcard .times .h{font-weight:700;font-size:19px;color:var(--ink)}
-  #dlcard .times .e{font-family:var(--disp);font-weight:600;font-size:18px;color:var(--ink)}
-  #dlcard .times .l{font-size:14px;color:var(--ink-soft);font-style:italic;margin:0 0 10px 0}
-  #dlcard .foot2{display:flex;align-items:center;justify-content:center;gap:18px;padding:12px 0 0}
-  #dlcard .foot2 .ln{height:1px;background:#9c8445;width:150px}
-  #dlcard .foot2 .t{font-family:var(--disp);font-size:22px;color:var(--ink)}
-  #dlcard .foot2 .t b{letter-spacing:.08em}
+  #dlcard .times .r{display:flex;align-items:baseline;gap:8px;margin:1px 0}
+  #dlcard .times .h{font-weight:700;font-size:18px;color:var(--blue-deep)}
+  #dlcard .times .e{font-family:var(--disp);font-weight:600;font-size:17px;color:var(--ink)}
+  #dlcard .times .l{font-size:13px;color:var(--ink-soft);font-style:italic;margin:0 0 9px 0}
+  #dlcard .foot{display:flex;align-items:center;justify-content:center;gap:16px;margin:2px 0 0}
+  #dlcard .foot .ln{height:1px;background:var(--sage);width:96px}
+  #dlcard .foot .t{font-family:var(--disp);font-size:20px;color:var(--ink)}
+  #dlcard .foot .t b{letter-spacing:.06em;color:var(--sage-deep)}
+  #dlcard .band{height:96px;margin-top:14px;border-radius:7px;overflow:hidden;position:relative;border:1px solid rgba(83,102,58,.22)}
+  #dlcard .band img{width:100%;height:100%;object-fit:cover;object-position:50% 60%;display:block}
+  #dlcard .band::after{content:"";position:absolute;inset:0;background:linear-gradient(to right,rgba(243,237,223,.6),rgba(243,237,223,0) 22%,rgba(243,237,223,0) 78%,rgba(243,237,223,.6))}
 </style>
 
 <div class="wrap">
@@ -199,16 +205,15 @@
         <div class="main">
           <div class="left">
             <div class="ph"><img src="img/couple-bw.jpg" alt=""></div>
-            <div class="badge">Invitation officielle</div>
-            <div class="fl2"><img src="img/flowers.jpg" alt=""></div>
+            <div class="label"><span class="ln"></span>Invitation officielle<span class="ln"></span></div>
           </div>
           <div class="right">
             <h2 class="names">Ella <span class="amp">&amp;</span> Emmanuel</h2>
-            <p class="greet">Cher(e) <b id="dl-nom">—</b></p>
+            <p class="greet"><span class="lbl">Cher(e)</span> <b id="dl-nom">—</b></p>
             <p class="conv">C'est avec joie que nous vous convions à célébrer notre union.</p>
-            <div class="hr"></div>
+            <div class="hr"><span class="l"></span><span class="d"></span><span class="l"></span></div>
             <div class="date">Samedi 26 Décembre 2026</div>
-            <div class="city">Cotonou, Bénin</div>
+            <div class="city">Cotonou · Bénin</div>
             <div class="boxes">
               <div class="box">PLACES : <b id="dl-places">—</b></div>
               <div class="box">TABLE : <b id="dl-table">—</b></div>
@@ -225,7 +230,8 @@
             </div>
           </div>
         </div>
-        <div class="foot2"><span class="ln"></span><span class="t"><b>DRESS CODE</b> &nbsp;·&nbsp; Chic &amp; élégant</span><span class="ln"></span></div>
+        <div class="foot"><span class="ln"></span><span class="t"><b>DRESS CODE</b> &nbsp;·&nbsp; Chic &amp; élégant</span><span class="ln"></span></div>
+        <div class="band"><img src="img/flowers.jpg" alt=""></div>
       </div>
     </div>
   </div>
