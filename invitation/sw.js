@@ -1,9 +1,10 @@
 /* Service worker — invitation + scanner consultables hors-ligne. */
-var CACHE = "ee-inv-v2";
+var CACHE = "ee-inv-v3";
 var CORE = [
   "./", "index.html", "checkin.html", "scanner.html",
   "favicon.svg", "mariage.ics", "manifest.webmanifest",
-  "img/couple-bw.jpg", "img/flowers.jpg"
+  "img/couple-bw.jpg", "img/flowers.jpg", "img/rings-wm.png", "img/pin.png",
+  "img/corner-tl.png", "img/corner-tr.png", "img/corner-bl.png", "img/corner-br.png"
 ];
 
 self.addEventListener("install", function (e) {

@@ -67,6 +67,12 @@
   .ev h3{font-family:var(--disp);font-weight:500;font-size:24px;margin:6px 0 10px;color:var(--ink)}
   .ev p{font-family:var(--sans);font-weight:400;font-size:14px;color:var(--ink-soft);margin:0}
   .ev p strong{color:var(--ink);font-weight:600}
+  .mapz{display:inline-flex;align-items:center;gap:6px;color:var(--sage-deep);font-weight:600;text-decoration:none;border-bottom:1px solid rgba(83,102,58,.35);padding-bottom:1px;transition:border-color .2s}
+  .mapz:hover{border-bottom-color:var(--sage-deep)}
+  .mapz svg{width:14px;height:17px;flex:none;stroke:var(--sage-deep);fill:none;stroke-width:2}
+  .ev .maplink{display:inline-flex;align-items:center;gap:6px;margin-top:8px;font-family:var(--sans);font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--sage-deep);text-decoration:none}
+  .ev .maplink svg{width:14px;height:17px;flex:none;stroke:var(--sage-deep);fill:none;stroke-width:2}
+  .ev .maplink:hover{color:var(--blue-deep)}
   .dress{margin-top:16px;background:rgba(140,160,106,.12);border:1px solid rgba(83,102,58,.25);border-radius:16px;padding:20px;text-align:center}
   .dress .h{font-family:var(--sans);font-weight:600;font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--sage-deep)}
   .dress p{font-family:var(--disp);font-style:italic;font-size:17px;color:var(--ink);margin:8px 0 0}
@@ -88,7 +94,7 @@
   #dlcard .cnr.tr{top:10px;left:1040px}
   #dlcard .cnr.bl{top:640px;left:10px}
   #dlcard .cnr.br{top:640px;left:1040px}
-  #dlcard .in{position:absolute;top:48px;left:52px;right:52px;bottom:38px;display:flex;flex-direction:column;z-index:2}
+  #dlcard .in{position:absolute;top:48px;left:52px;right:52px;bottom:48px;display:flex;flex-direction:column;z-index:2}
   #dlcard .main{flex:1;display:grid;grid-template-columns:352px 1fr;gap:46px;align-items:center}
   #dlcard .left{display:flex;flex-direction:column;align-items:center;justify-content:center}
   #dlcard .ph{width:312px;height:408px;background:#fff;padding:9px;border:1px solid rgba(83,102,58,.5);box-shadow:0 16px 36px -20px rgba(44,54,30,.55)}
@@ -126,9 +132,9 @@
   #dlcard .foot .t b{letter-spacing:.06em;color:var(--sage-deep)}
   #dlcard .right{position:relative}
   #dlcard .right > :not(.wm){position:relative;z-index:1}
-  #dlcard .wm{position:absolute;top:-16px;left:50%;width:366px;margin-left:-183px;opacity:.1;z-index:0}
-  #dlcard .medal{width:82px;height:82px;border-radius:50%;overflow:hidden;border:2px solid var(--sage);margin:0 auto 12px;box-shadow:0 9px 20px -9px rgba(44,54,30,.55)}
-  #dlcard .medal img{width:100%;height:100%;object-fit:cover;object-position:50% 66%;display:block}
+  #dlcard .wm{position:absolute;top:50%;left:50%;width:468px;height:468px;margin-top:-234px;margin-left:-234px;opacity:.07;z-index:0;pointer-events:none}
+  #dlcard .times .l{display:flex;align-items:center;gap:6px}
+  #dlcard .times .pin{width:13px;height:16px;flex:none;display:inline-block}
 </style>
 
 <div class="wrap">
@@ -176,11 +182,13 @@
         <div class="h">15h00 · Cérémonie</div>
         <h3>Célébration religieuse</h3>
         <p><strong>Église Saint-Jean de Gbégamey</strong><br>Cotonou, Bénin<br><span style="font-style:italic">Merci d'arriver 15 min à l'avance.</span></p>
+        <a class="maplink" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=%C3%89glise%20Saint-Jean%20de%20Gb%C3%A9gamey%2C%20Cotonou%2C%20B%C3%A9nin"><svg viewBox="0 0 24 30"><path d="M12 1.5C6.5 1.5 2.2 5.8 2.2 11.3 2.2 18.5 12 28.5 12 28.5s9.8-10 9.8-17.2C21.8 5.8 17.5 1.5 12 1.5Z"/><circle cx="12" cy="11.3" r="3.7"/></svg>Itinéraire</a>
       </div>
       <div class="ev">
         <div class="h">18h00 · Réception</div>
         <h3>Dîner &amp; festivités</h3>
         <p><strong>Le Palais des Anges</strong><br>Fidjrossè, Route des pêches, Cotonou</p>
+        <a class="maplink" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Le%20Palais%20des%20Anges%2C%20Fidjross%C3%A8%2C%20Cotonou%2C%20B%C3%A9nin"><svg viewBox="0 0 24 30"><path d="M12 1.5C6.5 1.5 2.2 5.8 2.2 11.3 2.2 18.5 12 28.5 12 28.5s9.8-10 9.8-17.2C21.8 5.8 17.5 1.5 12 1.5Z"/><circle cx="12" cy="11.3" r="3.7"/></svg>Itinéraire</a>
       </div>
     </div>
 
@@ -210,8 +218,7 @@
             <div class="label"><span class="ln"></span>Invitation officielle<span class="ln"></span></div>
           </div>
           <div class="right">
-            <img class="wm" src="img/watermark.png" alt="">
-            <div class="medal"><img src="img/flowers.jpg" alt=""></div>
+            <img class="wm" src="img/rings-wm.png" alt="">
             <h2 class="names">Ella <span class="amp">&amp;</span> Emmanuel</h2>
             <p class="greet"><span class="lbl">Cher(e)</span> <b id="dl-nom">—</b></p>
             <p class="conv">C'est avec joie que nous vous convions à célébrer notre union.</p>
@@ -227,9 +234,9 @@
               <div class="qrt"><b id="dl-ref">RÉF.</b>Présentez ce code à l'entrée</div>
               <div class="times">
                 <div class="r"><span class="h">15H00</span><span>—</span><span class="e">Cérémonie</span></div>
-                <div class="l">Église Saint-Jean de Gbégamey</div>
+                <div class="l"><img class="pin" src="img/pin.png" alt="">Église Saint-Jean de Gbégamey</div>
                 <div class="r"><span class="h">18H00</span><span>—</span><span class="e">Réception</span></div>
-                <div class="l">Le Palais des Anges, Fidjrossè</div>
+                <div class="l"><img class="pin" src="img/pin.png" alt="">Le Palais des Anges, Fidjrossè</div>
               </div>
             </div>
           </div>
