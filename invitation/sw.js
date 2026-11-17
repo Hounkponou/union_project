@@ -1,5 +1,5 @@
 /* Service worker — invitation + scanner consultables hors-ligne. */
-var CACHE = "ee-inv-v4";
+var CACHE = "ee-inv-v5";
 var CORE = [
   "./", "index.html", "checkin.html", "scanner.html",
   "favicon.svg", "mariage.ics", "manifest.webmanifest",

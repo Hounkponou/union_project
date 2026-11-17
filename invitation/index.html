@@ -310,10 +310,14 @@ function render(guest){
 
   hide(document.getElementById("loading"));
   show(document.getElementById("content"));
-  if(params.get("dl") === "1"){ setTimeout(function(){ telechargerCarte(false); }, 600); } // auto-téléchargement (lien ?id=...&dl=1)
+  setTimeout(preparerCarte, 400); // pré-génère la carte en tâche de fond (clic de téléchargement instantané)
+  if(params.get("dl") === "1"){ setTimeout(function(){ telechargerCarte(false); }, 1200); } // auto-téléchargement (lien ?id=...&dl=1)
 }
 
-// Téléchargement de la carte en image (fiabilisé : attente des images, largeur figée, fond ivoire)
+// ===== Téléchargement / partage de la carte =====
+var carteBlob = null, carteFname = "Invitation.png";
+var estMobile = /Mobi|Android|iPhone|iPad|iPod/.test(navigator.userAgent);
+
 function nomFichier(){
   var n = (document.getElementById("g-nom").textContent || "invitation").trim();
   n = n.replace(/\s+/g,"-").replace(/[^A-Za-z0-9\-]/g,"");
@@ -325,51 +329,64 @@ function imagesPretes(card){
     return new Promise(function(res){ im.onload = im.onerror = res; });
   }));
 }
-async function telechargerCarte(ev){
-  var gesture = ev !== false;                 // false = appel auto (?dl=1), sans geste utilisateur
-  var btn = document.getElementById("dl");
-  var card = document.getElementById("dlcard"); // carte dédiée au téléchargement (format invitation)
-  var old = btn.textContent; btn.textContent = "Préparation…"; btn.disabled = true;
-  function fini(){ btn.textContent = old; btn.disabled = false; }
+// Pré-génère la carte en tâche de fond dès l'affichage : le clic reste instantané
+// (indispensable sur iOS/Android, qui exigent un « geste utilisateur » pour partager/ouvrir).
+async function preparerCarte(){
   try{
+    var card = document.getElementById("dlcard");
     await imagesPretes(card);
-    await new Promise(function(r){ setTimeout(r, 150); }); // laisse le rendu se stabiliser
+    await new Promise(function(r){ setTimeout(r, 120); });
     var canvas = await html2canvas(card, {
       scale: 2, backgroundColor: "#F6F1E4", useCORS: true,
       width: 1200, height: 800, windowWidth: 1400, windowHeight: 1000
     });
-    var fname = nomFichier();
-    var blob = await new Promise(function(res){ canvas.toBlob(res, "image/png"); });
-
-    // 1) Partage natif (mobile) : ouvre « Enregistrer l'image / Envoyer » — marche sur iOS & Android
-    if(gesture && blob && navigator.canShare){
-      try{
-        var file = new File([blob], fname, { type: "image/png" });
-        if(navigator.canShare({ files: [file] })){
-          await navigator.share({ files: [file], title: "Invitation — Ella & Emmanuel" });
-          return fini();                      // partagé / enregistré : terminé
-        }
-      }catch(err){
-        if(err && err.name === "AbortError") return fini(); // annulé : ne pas forcer un 2e téléchargement
-        // sinon : partage non supporté -> on tente le téléchargement classique
-      }
-    }
-
-    // 2) Téléchargement classique (PC + Android Chrome)
-    var url = blob ? URL.createObjectURL(blob) : canvas.toDataURL("image/png");
-    var a = document.createElement("a");
-    a.download = fname; a.href = url; a.rel = "noopener";
-    document.body.appendChild(a); a.click(); a.remove();
-    if(blob) setTimeout(function(){ URL.revokeObjectURL(url); }, 5000);
-
-    // 3) iOS Safari ignore a.download : on ouvre l'image dans un onglet -> appui long « Enregistrer »
-    if(blob && /iPad|iPhone|iPod/.test(navigator.userAgent)){
-      setTimeout(function(){ try{ window.open(URL.createObjectURL(blob), "_blank"); }catch(x){} }, 300);
-    }
-  }catch(e){
-    alert("Téléchargement impossible sur cet appareil. Faites une capture d'écran de la carte.");
+    carteFname = nomFichier();
+    carteBlob = await new Promise(function(res){ canvas.toBlob(res, "image/png"); });
+  }catch(e){ carteBlob = null; }
+}
+function textePartage(){
+  var lien = location.origin + location.pathname + location.search.replace(/[?&]dl=1/,"");
+  return "Invitation au mariage d'Ella & Emmanuel\n"
+       + "Samedi 26 décembre 2026 — Cotonou, Bénin\n"
+       + "Cérémonie 15h00 · Église Saint-Jean de Gbégamey\n"
+       + "Réception 18h00 · Le Palais des Anges, Fidjrossè\n\n"
+       + "Votre invitation personnelle : " + lien;
+}
+async function telechargerCarte(ev){
+  var gesture = ev !== false;                 // false = appel auto (?dl=1), sans geste utilisateur
+  var btn = document.getElementById("dl");
+  var old = btn.textContent;
+  if(!carteBlob){                             // pas encore prête : on la génère (rare)
+    btn.textContent = "Préparation…"; btn.disabled = true;
+    await preparerCarte();
+    btn.textContent = old; btn.disabled = false;
   }
-  fini();
+  var blob = carteBlob;
+  if(!blob){ alert("Téléchargement impossible sur cet appareil. Faites une capture d'écran de la carte."); return; }
+
+  // 1) Mobile + partage de fichier : feuille native (Enregistrer l'image / Envoyer) + texte pré-rempli
+  if(gesture && estMobile && navigator.canShare){
+    try{
+      var file = new File([blob], carteFname, { type: "image/png" });
+      if(navigator.canShare({ files: [file] })){
+        await navigator.share({ files: [file], title: "Invitation — Ella & Emmanuel", text: textePartage() });
+        return;
+      }
+    }catch(err){ if(err && err.name === "AbortError") return; } // annulé par l'utilisateur
+  }
+  // 2) Mobile sans partage (ou navigateur intégré) : ouvrir l'image en grand -> appui long « Enregistrer »
+  if(gesture && estMobile){
+    var u = URL.createObjectURL(blob);
+    var w = window.open(u, "_blank");
+    if(!w){ location.href = u; }               // popup bloquée : on affiche l'image dans l'onglet
+    return;
+  }
+  // 3) PC (et auto-téléchargement) : téléchargement direct du fichier
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement("a");
+  a.download = carteFname; a.href = url; a.rel = "noopener";
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(function(){ URL.revokeObjectURL(url); }, 8000);
 }
 document.getElementById("dl").addEventListener("click", telechargerCarte);
 

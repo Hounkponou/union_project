@@ -151,17 +151,34 @@ function attribuerIDs() {
   SpreadsheetApp.getUi().alert(n + " identifiant(s) attribué(s) dans la colonne « " + headers[iId] + " ».");
 }
 
-/** Remplit « Lien invitation » pour chaque invité ayant un ID. */
+/**
+ * Remplit « Lien invitation » pour chaque invité ayant un ID.
+ * Les infos (nom, places, table, catégorie) sont ENCODÉES DANS LE LIEN : la carte
+ * s'affiche alors instantanément, SANS appel au serveur — donc fiable partout
+ * (réseau faible, navigateur intégré WhatsApp/Messenger…). L'ID reste dans le lien
+ * pour le QR de pointage et comme repli de lecture live.
+ */
 function genererLiens() {
   var sh = getSheet_(), data = sh.getDataRange().getValues(), headers = data[0];
   var iId = idx_(headers, COL.id), iLien = idx_(headers, COL.lien), iDl = idx_(headers, COL.telecharger);
+  var iNom = idx_(headers, COL.nom), iTable = idx_(headers, COL.table),
+      iPlaces = idx_(headers, COL.places), iCat = idx_(headers, COL.categorie);
   if (iId < 0 || iLien < 0) { SpreadsheetApp.getUi().alert("⚠️ Colonnes « ID » et « Lien invitation » requises (vois « Diagnostic »)."); return; }
+  function add(q, cle, i, r) {
+    if (i > -1) { var v = String(data[r][i]).trim(); if (v) q += "&" + cle + "=" + encodeURIComponent(v); }
+    return q;
+  }
   var n = 0;
   for (var r = 1; r < data.length; r++) {
     var id = String(data[r][iId]).trim();
     if (id) {
-      sh.getRange(r + 1, iLien + 1).setValue(INVITATION_URL + "/?id=" + id);
-      if (iDl > -1) sh.getRange(r + 1, iDl + 1).setValue(INVITATION_URL + "/?id=" + id + "&dl=1");
+      var q = "/?id=" + encodeURIComponent(id);
+      q = add(q, "nom", iNom, r);
+      q = add(q, "places", iPlaces, r);
+      q = add(q, "table", iTable, r);
+      q = add(q, "cat", iCat, r);
+      sh.getRange(r + 1, iLien + 1).setValue(INVITATION_URL + q);
+      if (iDl > -1) sh.getRange(r + 1, iDl + 1).setValue(INVITATION_URL + q + "&dl=1");
       n++;
     }
   }
